@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Kelola Barang</title>
+
+  <link rel="stylesheet" href="../css/global.css">
+  <link rel="stylesheet" href="../css/barang.css">
+
+  <script defer src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"></script>
+
+  <script defer src="../components/charts.js"></script>
+
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<div id="sidebar"></div>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- TOPBAR -->
+  <div id="topbar"></div>
+
+  <!-- CONTENT -->
+  <div class="content">
+
+    <!-- HEADER -->
+    <div class="barang-header">
+
+      <div>
+        <h1 class="page-title">Kelola Barang</h1>
+        <p class="page-subtitle">Tambah, edit, dan pantau stok barang</p>
+      </div>
+
+      <button class="btn btn-primary" id="openModal">
+        + Tambah Barang
+      </button>
+
+    </div>
+
+    <!-- FILTER -->
+    <div class="filter-grid">
+
+      <input
+        type="text"
+        id="searchInput"
+        class="input"
+        placeholder="Cari nama atau kode barang..."
+      >
+
+      <select class="input" id="filterKategori">
+        <option value="">Semua Kategori</option>
+        <option value="makanan">makanan</option>
+        <option value="minuman">minuman</option>
+        <option value="snack">snack</option>
+        <option value="paket hemat">paket hemat</option>
+      </select>
+
+    </div>
+
+    <!-- MINI STATS -->
+    <div class="mini-stats">
+
+      <div class="card mini-card">
+        <div class="mini-label">Total Barang</div>
+        <div class="mini-value" id="totalBarang">0</div>
+      </div>
+
+      <div class="card mini-card">
+        <div class="mini-label">Stok Habis</div>
+        <div class="mini-value" id="stokHabis">0</div>
+      </div>
+
+      <div class="card mini-card">
+        <div class="mini-label">Kategori</div>
+        <div class="mini-value" id="totalKategori">0</div>
+      </div>
+
+    </div>
+
+    <!-- TABLE -->
+    <div class="card table-card">
+
+      <div class="table-wrap">
+
+        <table class="table">
+
+          <thead>
+            <tr>
+              <th>Kode</th>
+              <th>Nama</th>
+              <th>Kategori</th>
+              <th>Harga</th>
+              <th>Stok</th>
+              <th>Barcode</th>
+              <th>Aksi</th>
+            </tr>
+          </thead>
+
+          <tbody id="tableBarang">
+            <tr><td colspan="7">Memuat data...</td></tr>
+          </tbody>
+
+        </table>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- MODAL BARANG -->
+<div class="modal" id="modalBarang">
+
+  <div class="modal-content">
+
+    <div class="modal-head">
+      <h2 id="modalTitle">Tambah Barang</h2>
+      <button class="close-btn" id="closeModal">✕</button>
+    </div>
+
+    <div class="modal-body">
+
+      <div class="form-group">
+        <label>Nama Barang</label>
+        <input type="text" id="namaBarang" class="input" placeholder="Contoh: nasi goreng">
+      </div>
+
+      <div class="form-group">
+        <label>Kategori</label>
+        <select id="kategoriBarang" class="input">
+          <option>makanan</option>
+          <option>minuman</option>
+          <option>snack</option>
+          <option>paket hemat</option>
+          <option>lainnya</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Kategori Baru (opsional)</label>
+        <input type="text" id="kategoriCustom" class="input" placeholder="contoh: paket hemat">
+      </div>
+
+      <div class="form-group">
+        <label>Harga</label>
+        <input type="number" id="hargaBarang" class="input" placeholder="Contoh: 10000">
+      </div>
+
+      <div class="form-group">
+        <label>Stok</label>
+        <input type="number" id="stokBarang" class="input" placeholder="Contoh: 10">
+      </div>
+
+      <button class="btn btn-primary full-btn" id="saveBarang">
+        Simpan Barang
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- loadComponent.js harus sebelum module scripts -->
+<script type="module" src="../js/loadComponent.js"></script>
+<script type="module" src="../js/barang.js"></script>
+<script type="module" src="../components/sidebar.js"></script>
+
+</body>
+</html>

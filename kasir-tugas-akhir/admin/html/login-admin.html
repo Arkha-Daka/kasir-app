@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+  <title>Login SmartKasir</title>
+
+  <link rel="stylesheet"
+        href="../css/global.css">
+
+  <style>
+
+    body {
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 18% 18%, rgba(245,158,11,.26), transparent 28%),
+        radial-gradient(circle at 82% 12%, rgba(37,99,235,.22), transparent 30%),
+        linear-gradient(135deg, #080c14, #121a2b 48%, #f0f2f8 48%);
+    }
+
+    .login-scene {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .login-shape {
+      position: absolute;
+      border-radius: 18px;
+      background: rgba(245,158,11,.18);
+      border: 1px solid rgba(255,255,255,.18);
+      animation: floatShape 7s ease-in-out infinite;
+    }
+
+    .shape-one { width: 90px; height: 90px; left: 9%; top: 18%; }
+    .shape-two { width: 120px; height: 60px; right: 10%; top: 16%; animation-delay: -2s; }
+    .shape-three { width: 70px; height: 70px; right: 17%; bottom: 18%; animation-delay: -4s; }
+
+    @keyframes floatShape {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-22px) rotate(8deg); }
+    }
+
+    .login-box {
+      position: relative;
+      width: min(92vw, 430px);
+      background: rgba(255,255,255,.94);
+      border: 1px solid rgba(255,255,255,.7);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 24px 70px rgba(8,12,20,.22);
+      animation: loginEnter .55s ease both;
+    }
+
+    @keyframes loginEnter {
+      from { opacity: 0; transform: translateY(20px) scale(.98); }
+      to { opacity: 1; transform: none; }
+    }
+
+    .login-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 26px;
+    }
+
+    .login-logo {
+      width: 46px;
+      height: 46px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      background: #f59e0b;
+      color: #0d1117;
+      font-weight: 900;
+      box-shadow: 0 12px 24px rgba(245,158,11,.28);
+    }
+
+    .login-brand h1 {
+      font-size: 24px;
+      line-height: 1.1;
+      color: #0d1117;
+    }
+
+    .login-brand p {
+      margin-top: 4px;
+      color: #64748b;
+      font-size: 13px;
+    }
+
+    .login-form {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .input {
+      border-radius: 10px;
+      border: 1px solid #d8deea;
+      background: #f7f8fc;
+      min-height: 46px;
+    }
+
+    .input:focus {
+      border-color: #f59e0b;
+      box-shadow: 0 0 0 3px #fef3c7;
+    }
+
+    .login-btn {
+      width: 100%;
+      min-height: 46px;
+      border-radius: 10px;
+      background: #0d1117;
+      color: white;
+      box-shadow: 0 12px 24px rgba(13,17,23,.18);
+      transition: transform .18s, box-shadow .18s;
+    }
+
+    .login-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 16px 28px rgba(13,17,23,.22);
+    }
+
+    .login-foot {
+      margin-top: 18px;
+      color: #64748b;
+      font-size: 12px;
+      text-align: center;
+    }
+
+    @media (max-width: 640px) {
+      body {
+        background:
+          radial-gradient(circle at 20% 10%, rgba(245,158,11,.24), transparent 30%),
+          linear-gradient(180deg, #080c14 0%, #121a2b 42%, #f0f2f8 42%);
+        padding: 18px;
+      }
+
+      .login-box {
+        padding: 24px;
+      }
+    }
+
+  </style>
+
+</head>
+<body>
+
+<div class="login-scene">
+  <div class="login-shape shape-one"></div>
+  <div class="login-shape shape-two"></div>
+  <div class="login-shape shape-three"></div>
+</div>
+
+<div class="login-box">
+
+  <div class="login-brand">
+    <div class="login-logo">KS</div>
+    <div>
+      <h1>Admin Kantin</h1>
+      <p>Masuk ke dashboard pengelola</p>
+    </div>
+  </div>
+
+  <div class="login-form">
+
+    <input
+      type="text"
+      id="username"
+      class="input"
+      placeholder="Username"
+    >
+
+    <input
+      type="password"
+      id="password"
+      class="input"
+      placeholder="Password"
+    >
+
+    <button
+      class="btn btn-primary login-btn"
+      onclick="login()"
+    >
+      Login
+    </button>
+
+  </div>
+
+  <div class="login-foot">
+    Kantin Sekolah POS
+  </div>
+
+</div>
+
+<script type="module" src="../js/login-admin.js"></script>
+
+</body>
+</html>

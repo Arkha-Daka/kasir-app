@@ -1,0 +1,140 @@
+.page-header {
+  margin-bottom: 25px;
+}
+
+.filter-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4,1fr);
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.stat-card {
+  padding: 18px;
+}
+
+.stat-label {
+  opacity: 0.7;
+  margin-bottom: 10px;
+}
+
+.stat-value {
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.transaksi-card {
+  height: calc(100vh - 320px);
+  overflow: hidden;
+}
+
+.table-wrap {
+  height: 100%;
+  overflow: auto;
+}
+
+.badge {
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+.badge-cash {
+  background: rgba(34,197,94,0.15);
+  color: #22c55e;
+}
+
+.badge-qris {
+  background: rgba(59,130,246,0.15);
+  color: #3b82f6;
+}
+
+.badge-transfer {
+  background: rgba(168,85,247,0.15);
+  color: #a855f7;
+}
+
+.btn-detail {
+  background: rgba(14,165,233,0.15);
+  color: #38bdf8;
+}
+
+/* Modal detail transaksi — max-width sedang */
+#detailModal .modal-content {
+  max-width: 600px;
+}
+
+.modal-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.close-btn {
+  border: none;
+  background: transparent;
+  font-size: 20px;
+  cursor: pointer;
+  color: inherit;
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.detail-items {
+  margin-top: 20px;
+}
+
+.detail-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+@media (max-width: 1000px) {
+
+  .stats-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+}
+
+@media (max-width: 700px) {
+
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .filter-grid {
+    grid-template-columns: 1fr;
+  }
+
+}
+
+/* =========================
+   CHART
+========================= */
+
+.chart-container {
+  width: 100%;
+  height: 320px;
+  margin-top: 15px;
+}
+
+.chart-container canvas {
+  width: 100% !important;
+  height: 100% !important;
+}

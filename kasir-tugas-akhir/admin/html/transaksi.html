@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Transaksi</title>
+
+  <link rel="stylesheet" href="../css/global.css">
+  <link rel="stylesheet" href="../css/transaksi.css">
+
+  <!-- Chart.js harus PALING ATAS sebelum script lain -->
+  <script defer src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script defer src="../components/charts.js"></script>
+
+</head>
+<body>
+
+<div id="sidebar"></div>
+
+<div class="main">
+
+  <div id="topbar"></div>
+
+  <div class="content">
+
+    <!-- HEADER -->
+    <div class="page-header">
+
+      <div>
+        <h1 class="page-title">Transaksi</h1>
+        <p class="page-subtitle">Pantau seluruh transaksi toko</p>
+      </div>
+
+    </div>
+
+    <!-- FILTER -->
+    <div class="filter-grid">
+
+      <input
+        type="text"
+        class="input"
+        id="searchInput"
+        placeholder="🔍 Cari invoice..."
+      >
+
+      <select class="input" id="filterMetode">
+        <option value="">Semua Metode</option>
+        <option value="Cash">Cash</option>
+        <option value="QRIS">QRIS</option>
+        <option value="Transfer">Transfer</option>
+      </select>
+
+      <select class="input" id="filterKasir">
+        <option value="">Semua Kasir</option>
+      </select>
+
+      <input
+        type="date"
+        class="input"
+        id="filterStart"
+      >
+
+      <input
+        type="date"
+        class="input"
+        id="filterEnd"
+      >
+
+    </div>
+
+    <!-- STATS -->
+    <div class="stats-grid">
+
+      <div class="card stat-card">
+        <div class="stat-label">Total Transaksi</div>
+        <div class="stat-value" id="totalTransaksi">0</div>
+      </div>
+
+      <div class="card stat-card">
+        <div class="stat-label">Omzet</div>
+        <div class="stat-value" id="totalOmzet">Rp 0</div>
+      </div>
+
+      <div class="card stat-card">
+        <div class="stat-label">Produk Terjual</div>
+        <div class="stat-value" id="produkTerjual">0</div>
+      </div>
+
+      <div class="card stat-card">
+        <div class="stat-label">Rata-rata Belanja</div>
+        <div class="stat-value" id="avgBelanja">Rp 0</div>
+      </div>
+
+    </div>
+
+    <!-- TABLE -->
+    <div class="card transaksi-card">
+
+      <div class="table-wrap">
+
+        <table class="table">
+
+          <thead>
+            <tr>
+              <th>Invoice</th>
+              <th>Total</th>
+              <th>Metode</th>
+              <th>Kasir</th>
+              <th>Tanggal</th>
+              <th>Detail</th>
+            </tr>
+          </thead>
+
+          <tbody id="tableTransaksi">
+            <tr><td colspan="6">Memuat data...</td></tr>
+          </tbody>
+
+        </table>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- MODAL DETAIL -->
+<div class="modal" id="detailModal">
+
+  <div class="modal-content">
+
+    <div class="modal-head">
+      <h2>Detail Transaksi</h2>
+      <button class="close-btn" id="closeModal">✕</button>
+    </div>
+
+    <div id="detailContent"></div>
+
+  </div>
+
+</div>
+
+<!-- loadComponent.js harus sebelum module scripts -->
+<script type="module" src="../js/loadComponent.js"></script>
+<script type="module" src="../js/transaksi.js"></script>
+<script type="module" src="../components/sidebar.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,209 @@
+<div class="sidebar">
+
+  <div class="sidebar-logo">
+    <div class="logo-box">KS</div>
+    <div>
+      <span class="brand-name">Kantin<span>Sekolah</span></span>
+      <p>Admin Panel</p>
+    </div>
+  </div>
+
+  <div class="sidebar-menu">
+
+    <a href="../html/admin.html" class="sidebar-link">
+      Dashboard
+    </a>
+
+    <a href="../html/barang.html" class="sidebar-link">
+      Barang
+    </a>
+
+    <a href="../html/transaksi.html" class="sidebar-link">
+      Transaksi
+    </a>
+
+    <button type="button" class="sidebar-link sidebar-btn" onclick="openLaporan()">
+      Laporan
+    </button>
+
+    <button type="button" class="sidebar-link sidebar-btn" onclick="openSetting()">
+      Setting
+    </button>
+
+  </div>
+
+</div>
+
+<!-- MODAL LAPORAN -->
+<div class="modal" id="laporanModal">
+
+  <div class="modal-content laporan-modal">
+
+    <div class="modal-head">
+
+      <h2>Laporan Penjualan</h2>
+
+      <button class="close-btn" onclick="closeLaporan()">
+        x
+      </button>
+
+    </div>
+
+    <div class="laporan-filter">
+      <input type="date" id="laporanStart" class="input">
+      <input type="date" id="laporanEnd" class="input">
+      <button class="btn btn-primary" onclick="filterLaporan()">
+        Filter
+      </button>
+      <button class="btn btn-primary" onclick="exportLaporanCSV()">
+        Export CSV
+      </button>
+      <button class="btn btn-primary" onclick="printLaporan()">
+        Cetak/PDF
+      </button>
+    </div>
+
+    <div class="laporan-grid">
+
+      <div class="laporan-card">
+        <div class="laporan-label">Omzet Hari Ini</div>
+        <div class="laporan-value" id="laporanOmzet">Rp 0</div>
+      </div>
+
+      <div class="laporan-card">
+        <div class="laporan-label">Total Transaksi</div>
+        <div class="laporan-value" id="laporanTransaksi">0</div>
+      </div>
+
+      <div class="laporan-card">
+        <div class="laporan-label">Produk Terjual</div>
+        <div class="laporan-value" id="laporanProduk">0</div>
+      </div>
+
+      <div class="laporan-card">
+        <div class="laporan-label">Barang Hampir Habis</div>
+        <div class="laporan-value" id="laporanStok">0</div>
+      </div>
+
+    </div>
+
+    <div class="laporan-section">
+
+      <h3>Produk Terlaris</h3>
+
+      <div class="top-product-list" id="topProductList">
+        Memuat data...
+      </div>
+
+    </div>
+
+    <div class="laporan-section">
+
+      <h3>Riwayat Stok Terbaru</h3>
+
+      <div class="top-product-list" id="stokLogList">
+        Memuat data...
+      </div>
+
+    </div>
+
+    <div class="card chart-card">
+
+      <div class="card-head">
+        <h3>Grafik Penjualan</h3>
+      </div>
+
+      <div class="chart-container">
+        <canvas id="salesChart"></canvas>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- MODAL SETTING -->
+<div class="modal" id="settingModal">
+
+  <div class="modal-content setting-modal">
+
+    <div class="modal-head">
+
+      <h2>Pengaturan</h2>
+
+      <button class="close-btn" onclick="closeSetting()">
+        x
+      </button>
+
+    </div>
+
+    <div class="setting-grid">
+
+      <div class="setting-card">
+
+        <div class="setting-title">Keamanan Admin</div>
+        <p>Perbarui password akun admin yang digunakan untuk masuk dashboard.</p>
+
+        <button class="btn btn-primary" onclick="ubahPasswordAdmin()">
+          Ubah Password Admin
+        </button>
+
+      </div>
+
+      <div class="setting-card">
+
+        <div class="setting-title">Tema Tampilan</div>
+        <p>Ganti mode tampilan dashboard agar nyaman digunakan.</p>
+
+        <button class="btn btn-ghost" id="toggleTheme">
+          Toggle Theme
+        </button>
+
+      </div>
+
+    </div>
+
+    <div class="setting-card setting-form-card">
+
+      <div class="setting-title">Buat Akun Kasir</div>
+
+      <div class="setting-form">
+
+        <input type="text" id="kasirNama" class="input" placeholder="Nama Lengkap Kasir">
+
+        <input type="text" id="kasirUsername" class="input" placeholder="Username Kasir">
+
+        <input type="password" id="kasirPassword" class="input" placeholder="Password Kasir">
+
+        <select id="kasirRole" class="input">
+          <option value="kasir">kasir</option>
+          <option value="admin">admin</option>
+        </select>
+
+        <label class="setting-check">
+          <input type="checkbox" id="kasirAktif" checked>
+          <span>Akun aktif</span>
+        </label>
+
+        <button class="btn btn-primary" onclick="tambahKasir()">
+          Tambah Kasir
+        </button>
+
+      </div>
+
+    </div>
+
+    <div class="setting-card">
+
+      <div class="setting-title">List Akun Kasir</div>
+
+      <div class="kasir-list" id="kasirList">
+        Memuat data...
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

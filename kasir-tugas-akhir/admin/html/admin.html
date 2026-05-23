@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0">
+
+  <title>Dashboard Admin</title>
+
+  <!-- CSS -->
+  <link rel="stylesheet"
+    href="../css/global.css">
+
+  <link rel="stylesheet"
+    href="../css/admin.css">
+
+  <script defer src="../components/charts.js"></script>
+
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<div id="sidebar"></div>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- TOPBAR -->
+  <div id="topbar"></div>
+
+  <!-- CONTENT -->
+  <div class="content">
+
+    <!-- HEADER -->
+    <div class="page-header">
+
+      <div>
+
+        <h1 class="page-title">
+          Dashboard Admin
+        </h1>
+
+        <p class="page-subtitle">
+          Pantau statistik toko dan transaksi
+        </p>
+
+      </div>
+
+      <div
+        class="date-box"
+        id="todayDate">
+
+        20 Mei 2026
+
+      </div>
+
+    </div>
+
+    <!-- DASHBOARD -->
+    <div class="dashboard-layout">
+
+      <!-- ATAS -->
+      <div class="dashboard-top">
+
+        <!-- LEFT -->
+        <div class="dashboard-left">
+
+          <!-- STATS -->
+          <div class="stats-grid">
+
+            <!-- TOTAL BARANG -->
+            <div class="card stat-card">
+
+              <div class="stat-top">
+
+                <span>📦</span>
+
+                <span class="stat-label">
+                  Total Barang
+                </span>
+
+              </div>
+
+              <div
+                class="stat-value"
+                id="totalBarang">
+
+                0
+
+              </div>
+
+            </div>
+
+            <!-- TOTAL TRANSAKSI -->
+            <div class="card stat-card">
+
+              <div class="stat-top">
+
+                <span>🧾</span>
+
+                <span class="stat-label">
+                  Total Transaksi
+                </span>
+
+              </div>
+
+              <div
+                class="stat-value"
+                id="totalTransaksi">
+
+                0
+
+              </div>
+
+            </div>
+
+            <!-- OMZET -->
+            <div class="card stat-card">
+
+              <div class="stat-top">
+
+                <span>💰</span>
+
+                <span class="stat-label">
+                  Omzet Hari Ini
+                </span>
+
+              </div>
+
+              <div
+                class="stat-value"
+                id="totalOmzet">
+
+                Rp 0
+
+              </div>
+
+            </div>
+
+            <!-- BARANG HABIS -->
+            <div class="card stat-card">
+
+              <div class="stat-top">
+
+                <span>⚠️</span>
+
+                <span class="stat-label">
+                  Barang Habis
+                </span>
+
+              </div>
+
+              <div
+                class="stat-value"
+                id="barangHabis">
+
+                0
+
+              </div>
+
+            </div>
+
+          </div>
+
+          <!-- PERIODE -->
+          <div class="period-grid">
+
+            <div class="card period-card">
+              <span>Pendapatan Minggu Ini</span>
+              <strong id="omzetMinggu">Rp 0</strong>
+            </div>
+
+            <div class="card period-card">
+              <span>Pendapatan Bulan Ini</span>
+              <strong id="omzetBulan">Rp 0</strong>
+            </div>
+
+            <div class="card period-card">
+              <span>Produk Terlaris</span>
+              <strong id="produkTerlaris">-</strong>
+            </div>
+
+          </div>
+
+          <!-- TRANSAKSI -->
+          <div class="card transaksi-card">
+
+            <div class="card-head">
+
+              <h3>
+                Transaksi Terbaru
+              </h3>
+
+            </div>
+
+            <div class="table-wrap">
+
+              <table class="table">
+
+                <thead>
+
+                  <tr>
+
+                    <th>
+                      Invoice
+                    </th>
+
+                    <th>
+                      Total
+                    </th>
+
+                    <th>
+                      Tanggal
+                    </th>
+
+                  </tr>
+
+                </thead>
+
+                <tbody id="recentTransactions">
+
+                  <tr>
+
+                    <td colspan="3">
+                      Memuat data...
+                    </td>
+
+                  </tr>
+
+                </tbody>
+
+              </table>
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- RIGHT -->
+        <div class="dashboard-right">
+
+          <!-- BARANG TERBARU -->
+          <div class="card barang-card">
+
+            <div class="card-head">
+
+              <h3>
+                Barang Terbaru
+              </h3>
+
+            </div>
+
+            <div
+              class="barang-list"
+              id="barangList">
+
+              <div class="barang-item">
+
+                <span>
+                  Memuat data...
+                </span>
+
+              </div>
+
+            </div>
+
+          </div>
+
+          <!-- STOK MENIPIS -->
+          <div class="card notif-card">
+
+            <div class="card-head">
+
+              <h3>
+                ⚠️ Stok Menipis
+              </h3>
+
+            </div>
+
+            <div
+              class="notif-list"
+              id="stokMenipisList">
+
+              <div class="notif-item">
+                Memuat data...
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- AKTIVITAS -->
+      <div class="card aktivitas-card">
+
+        <div class="card-head">
+
+          <h3>
+            🕘 Aktivitas Terbaru
+          </h3>
+
+        </div>
+
+        <div
+          class="aktivitas-list"
+          id="aktivitasList">
+
+          <div class="aktivitas-item">
+            Memuat aktivitas...
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- SCRIPTS -->
+<script type="module" src="../js/loadComponent.js"></script>
+
+<script
+  type="module"
+  src="../js/admin.js">
+</script>
+
+<script
+  type="module"
+  src="../components/sidebar.js">
+</script>
+
+</body>
+</html>

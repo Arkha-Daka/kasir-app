@@ -1,0 +1,181 @@
+.barang-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.filter-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.mini-stats {
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.mini-card {
+  padding: 18px;
+}
+
+.mini-label {
+  opacity: 0.7;
+  margin-bottom: 10px;
+}
+
+.mini-value {
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.table-card {
+  height: calc(100vh - 330px);
+  overflow: hidden;
+}
+
+.table-wrap {
+  height: 100%;
+  overflow: auto;
+}
+
+.badge-stock {
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+.stock-safe {
+  background: rgba(34,197,94,0.15);
+  color: #22c55e;
+}
+
+.stock-low {
+  background: rgba(234,179,8,0.15);
+  color: #eab308;
+}
+
+.stock-empty {
+  background: rgba(239,68,68,0.15);
+  color: #ef4444;
+}
+
+.action-group {
+  display: flex;
+  gap: 10px;
+}
+
+.btn-edit {
+  background: rgba(14,165,233,0.15);
+  color: #38bdf8;
+}
+
+.btn-delete {
+  background: rgba(239,68,68,0.15);
+  color: #ef4444;
+}
+
+/* Modal tambah barang — max-width kecil, khusus form */
+#modalBarang .modal-content {
+  max-width: 500px;
+}
+
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+}
+
+.full-btn {
+  width: 100%;
+}
+
+#openModal,
+#saveBarang {
+  background: var(--accent);
+  color: var(--accent-fg);
+  border: 1px solid var(--accent);
+}
+
+#openModal:hover,
+#saveBarang:hover {
+  background: var(--accent2);
+  color: var(--accent-fg);
+  border-color: var(--accent2);
+  filter: none;
+}
+
+#openModal:active,
+#saveBarang:active {
+  background: var(--accent2);
+  color: var(--accent-fg);
+  transform: scale(.97);
+}
+
+body.dark #openModal,
+body.dark #saveBarang {
+  background: var(--accent);
+  color: var(--accent-fg);
+  border-color: var(--accent);
+}
+
+body.dark #openModal:hover,
+body.dark #saveBarang:hover {
+  background: var(--accent2);
+  color: var(--accent-fg);
+  border-color: var(--accent2);
+}
+
+body.dark #openModal:active,
+body.dark #saveBarang:active {
+  background: var(--accent2);
+  color: var(--accent-fg);
+}
+
+body.dark .form-group label,
+body.dark .mini-label {
+  color: #d8e1ef;
+  opacity: 1;
+}
+
+body.dark .btn-edit {
+  background: rgba(59,130,246,.18);
+  color: #93c5fd;
+  border: 1px solid rgba(147,197,253,.35);
+}
+
+body.dark .btn-delete {
+  background: rgba(248,113,113,.18);
+  color: #fca5a5;
+  border: 1px solid rgba(252,165,165,.35);
+}
+
+.barcode-box svg {
+  max-width: 150px;
+}
+
+@media (max-width: 900px) {
+
+  .mini-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .filter-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .barang-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+
+}
