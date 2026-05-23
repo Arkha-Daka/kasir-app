@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kantin Sekolah — Portal Login</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: Arial, "Segoe UI", sans-serif;
+      background: #070b14;
+      color: white;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .bg {
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(circle at 20% 20%, rgba(245,158,11,.25), transparent 28%),
+        radial-gradient(circle at 80% 10%, rgba(59,130,246,.20), transparent 30%),
+        radial-gradient(circle at 50% 90%, rgba(20,184,166,.18), transparent 30%),
+        linear-gradient(135deg, #070b14, #0d1117, #111827);
+      z-index: -3;
+    }
+
+    .grid {
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.04) 1px, transparent 1px);
+      background-size: 48px 48px;
+      mask-image: linear-gradient(to bottom, transparent, black 20%, black 80%, transparent);
+      animation: moveGrid 12s linear infinite;
+      z-index: -2;
+    }
+
+    @keyframes moveGrid {
+      from {
+        transform: translateY(0);
+      }
+      to {
+        transform: translateY(48px);
+      }
+    }
+
+    .orb {
+      position: fixed;
+      width: 260px;
+      height: 260px;
+      border-radius: 50%;
+      filter: blur(20px);
+      opacity: .45;
+      z-index: -1;
+      animation: float 7s ease-in-out infinite;
+    }
+
+    .orb.one {
+      background: #f59e0b;
+      top: 8%;
+      left: 10%;
+    }
+
+    .orb.two {
+      background: #2563eb;
+      bottom: 10%;
+      right: 12%;
+      animation-delay: -2s;
+    }
+
+    @keyframes float {
+      0%, 100% {
+        transform: translateY(0) scale(1);
+      }
+      50% {
+        transform: translateY(-30px) scale(1.08);
+      }
+    }
+
+    .portal {
+      width: min(920px, 92vw);
+      min-height: 520px;
+      display: grid;
+      grid-template-columns: 1.1fr .9fr;
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.14);
+      border-radius: 28px;
+      overflow: hidden;
+      backdrop-filter: blur(18px);
+      box-shadow: 0 30px 90px rgba(0,0,0,.45);
+      animation: popUp .8s ease both;
+    }
+
+    @keyframes popUp {
+      from {
+        opacity: 0;
+        transform: translateY(28px) scale(.96);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .hero {
+      padding: 46px;
+      position: relative;
+      background:
+        linear-gradient(135deg, rgba(245,158,11,.22), transparent),
+        rgba(255,255,255,.03);
+      overflow: hidden;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 13px;
+      border-radius: 999px;
+      background: rgba(245,158,11,.14);
+      border: 1px solid rgba(245,158,11,.35);
+      color: #fbbf24;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      margin-bottom: 26px;
+    }
+
+    .pulse {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #f59e0b;
+      box-shadow: 0 0 0 0 rgba(245,158,11,.8);
+      animation: pulse 1.6s infinite;
+    }
+
+    @keyframes pulse {
+      70% {
+        box-shadow: 0 0 0 12px rgba(245,158,11,0);
+      }
+      100% {
+        box-shadow: 0 0 0 0 rgba(245,158,11,0);
+      }
+    }
+
+    h1 {
+      font-size: clamp(36px, 5vw, 62px);
+      line-height: .98;
+      letter-spacing: -2px;
+      margin-bottom: 20px;
+    }
+
+    h1 span {
+      color: #f59e0b;
+    }
+
+    .desc {
+      max-width: 430px;
+      color: #a8b3c7;
+      line-height: 1.7;
+      font-size: 15px;
+    }
+
+    .tech-card {
+      position: absolute;
+      left: 46px;
+      right: 46px;
+      bottom: 40px;
+      padding: 18px;
+      border-radius: 18px;
+      background: rgba(13,17,23,.72);
+      border: 1px solid rgba(255,255,255,.12);
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .stat {
+      padding: 12px;
+      border-radius: 14px;
+      background: rgba(255,255,255,.05);
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 20px;
+      color: #fbbf24;
+      margin-bottom: 4px;
+    }
+
+    .stat small {
+      color: #94a3b8;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+    }
+
+    .login-side {
+      padding: 46px 38px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      background: rgba(7,11,20,.42);
+    }
+
+    .logo {
+      width: 64px;
+      height: 64px;
+      border-radius: 20px;
+      background: linear-gradient(135deg, #f59e0b, #f97316);
+      color: #0d1117;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      font-weight: 900;
+      margin-bottom: 22px;
+      box-shadow: 0 14px 35px rgba(245,158,11,.34);
+      animation: glow 2.6s ease-in-out infinite;
+    }
+
+    @keyframes glow {
+      0%, 100% {
+        box-shadow: 0 14px 35px rgba(245,158,11,.25);
+      }
+      50% {
+        box-shadow: 0 14px 55px rgba(245,158,11,.55);
+      }
+    }
+
+    .login-side h2 {
+      font-size: 28px;
+      margin-bottom: 8px;
+    }
+
+    .login-side p {
+      color: #94a3b8;
+      font-size: 14px;
+      margin-bottom: 26px;
+      line-height: 1.6;
+    }
+
+    .login-btn {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      text-decoration: none;
+      color: white;
+      padding: 17px 18px;
+      border-radius: 16px;
+      margin-bottom: 14px;
+      background: rgba(255,255,255,.07);
+      border: 1px solid rgba(255,255,255,.12);
+      overflow: hidden;
+      transition: transform .22s ease, border-color .22s ease, background .22s ease;
+    }
+
+    .login-btn::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, transparent, rgba(245,158,11,.22), transparent);
+      transform: translateX(-100%);
+      transition: transform .55s ease;
+    }
+
+    .login-btn:hover::before {
+      transform: translateX(100%);
+    }
+
+    .login-btn:hover {
+      transform: translateY(-3px);
+      border-color: rgba(245,158,11,.6);
+      background: rgba(245,158,11,.12);
+    }
+
+    .login-btn .left {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 13px;
+      background: rgba(245,158,11,.16);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+    }
+
+    .login-btn strong {
+      display: block;
+      font-size: 15px;
+      margin-bottom: 3px;
+    }
+
+    .login-btn small {
+      color: #94a3b8;
+      font-size: 12px;
+    }
+
+    .arrow {
+      position: relative;
+      color: #f59e0b;
+      font-size: 22px;
+      transition: transform .2s ease;
+    }
+
+    .login-btn:hover .arrow {
+      transform: translateX(5px);
+    }
+
+    .footer {
+      margin-top: 20px;
+      color: #64748b;
+      font-size: 12px;
+      text-align: center;
+    }
+
+    @media (max-width: 820px) {
+      body {
+        overflow: auto;
+        padding: 22px 0;
+      }
+
+      .portal {
+        grid-template-columns: 1fr;
+      }
+
+      .hero {
+        min-height: 360px;
+      }
+
+      .tech-card {
+        position: static;
+        margin-top: 34px;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .hero,
+      .login-side {
+        padding: 28px 22px;
+      }
+
+      .tech-card {
+        grid-template-columns: 1fr;
+      }
+
+      .login-btn {
+        padding: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="bg"></div>
+  <div class="grid"></div>
+  <div class="orb one"></div>
+  <div class="orb two"></div>
+
+  <main class="portal">
+
+    <section class="hero">
+      <div class="badge">
+        <span class="pulse"></span>
+        Smart Cashier System
+      </div>
+
+      <h1>
+        Kantin<span>Sekolah</span>
+      </h1>
+
+      <p class="desc">
+        Sistem kasir digital untuk mengelola transaksi, stok barang,
+        laporan penjualan, dan akun kasir dengan tampilan modern.
+      </p>
+
+      <div class="tech-card">
+        <div class="stat">
+          <strong>POS</strong>
+          <small>Kasir Digital</small>
+        </div>
+
+        <div class="stat">
+          <strong>Live</strong>
+          <small>Data Realtime</small>
+        </div>
+
+        <div class="stat">
+          <strong>Fast</strong>
+          <small>Kelola Cepat</small>
+        </div>
+      </div>
+    </section>
+
+    <section class="login-side">
+      <div class="logo">KS</div>
+
+      <h2>Masuk Portal</h2>
+      <p>
+        Pilih akses sesuai peran kamu untuk masuk ke sistem.
+      </p>
+
+      <a href="admin/html/login-admin.html" class="login-btn">
+        <div class="left">
+          <div class="icon">🛡️</div>
+          <div>
+            <strong>Login Admin</strong>
+            <small>Kelola barang, transaksi, laporan</small>
+          </div>
+        </div>
+        <div class="arrow">→</div>
+      </a>
+
+      <a href="kasir/html/login-kasir.html" class="login-btn">
+        <div class="left">
+          <div class="icon">🧾</div>
+          <div>
+            <strong>Login Kasir</strong>
+            <small>Input transaksi dan pembayaran</small>
+          </div>
+        </div>
+        <div class="arrow">→</div>
+      </a>
+
+      <div class="footer">
+        © 2026 Kantin Sekolah
+      </div>
+    </section>
+
+  </main>
+
+</body>
+</html>
