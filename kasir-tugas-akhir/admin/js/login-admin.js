@@ -55,10 +55,6 @@ async function login() {
           "admin"
         );
 
-        localStorage.removeItem(
-          "kasirLogin"
-        );
-
         window.location.href =
           "../html/admin.html";
 
@@ -96,16 +92,6 @@ async function login() {
             username
           },
           "kasir"
-        );
-
-        localStorage.setItem(
-          "kasirLogin",
-          "true"
-        );
-
-        localStorage.setItem(
-          "kasirUsername",
-          username
         );
 
         window.location.href =

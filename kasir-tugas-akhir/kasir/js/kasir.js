@@ -263,7 +263,7 @@ window.pilihProduk = function (id) {
 
 window.logoutKasir = function () {
 
-  clearLoginUser();
+  clearLoginUser("kasir");
 
   window.location.href =
     "../html/login-kasir.html";

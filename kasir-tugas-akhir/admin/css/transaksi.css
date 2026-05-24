@@ -138,3 +138,63 @@
   width: 100% !important;
   height: 100% !important;
 }
+
+/* =========================
+   THEME OVERRIDES
+========================= */
+
+.stat-label,
+.detail-row span,
+.detail-items h3 {
+  color: var(--text2);
+  opacity: 1;
+}
+
+.stat-value,
+.detail-row strong,
+.detail-item {
+  color: var(--text);
+}
+
+.btn-detail {
+  background: var(--accent-soft);
+  color: var(--accent2);
+  border: 1px solid rgba(245,158,11,.35);
+}
+
+.btn-detail:hover {
+  background: var(--accent);
+  color: var(--accent-fg);
+}
+
+.badge-cash {
+  background: var(--green-soft);
+  color: var(--green);
+}
+
+.badge-qris,
+.badge-transfer {
+  background: var(--accent-soft);
+  color: var(--accent2);
+}
+
+.detail-item {
+  border-bottom: 1px solid var(--border);
+}
+
+body.dark .stat-label,
+body.dark .detail-row span,
+body.dark .detail-items h3 {
+  color: #d8e1ef;
+}
+
+body.dark .btn-detail {
+  background: #422006;
+  color: #fbbf24;
+  border-color: rgba(251,191,36,.35);
+}
+
+body.dark .btn-detail:hover {
+  background: var(--accent);
+  color: var(--accent-fg);
+}

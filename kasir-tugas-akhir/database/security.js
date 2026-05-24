@@ -17,27 +17,46 @@ export function saveLoginUser(user, role) {
     loginAt: Date.now()
   };
 
-  localStorage.setItem("loginUser", JSON.stringify(safeUser));
+  localStorage.setItem(getLoginStorageKey(role), JSON.stringify(safeUser));
   return safeUser;
 }
 
-export function getLoginUser() {
+function getLoginStorageKey(role) {
+  return role === "admin" ? "adminLoginUser" : "kasirLoginUser";
+}
+
+export function getLoginUser(role) {
   try {
-    return JSON.parse(localStorage.getItem("loginUser") || "null");
+    const key = role ? getLoginStorageKey(role) : "loginUser";
+    return JSON.parse(localStorage.getItem(key) || "null");
   } catch {
     return null;
   }
 }
 
-export function clearLoginUser() {
+export function clearLoginUser(role) {
+  if (role) {
+    localStorage.removeItem(getLoginStorageKey(role));
+
+    if (role === "kasir") {
+      localStorage.removeItem("kasirLogin");
+      localStorage.removeItem("kasirUsername");
+      localStorage.removeItem("kasirNama");
+    }
+
+    return;
+  }
+
   localStorage.removeItem("loginUser");
+  localStorage.removeItem("adminLoginUser");
+  localStorage.removeItem("kasirLoginUser");
   localStorage.removeItem("kasirLogin");
   localStorage.removeItem("kasirUsername");
   localStorage.removeItem("kasirNama");
 }
 
 export function requireRole(role, redirectPath) {
-  const user = getLoginUser();
+  const user = getLoginUser(role);
 
   if (
     !user ||
@@ -46,7 +65,7 @@ export function requireRole(role, redirectPath) {
     !user.username ||
     user.aktif === false
   ) {
-    clearLoginUser();
+    clearLoginUser(role);
     window.location.href = redirectPath;
     throw new Error("Akses ditolak");
   }

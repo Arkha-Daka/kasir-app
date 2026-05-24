@@ -327,7 +327,7 @@ window.addEventListener(
 window.logoutAdmin =
 function () {
 
-  clearLoginUser();
+  clearLoginUser("admin");
 
   window.location.href =
     "../html/login-admin.html";

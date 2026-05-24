@@ -645,3 +645,30 @@ body.dark .notif-item {
     max-height: 320px;
   }
 }
+
+/* =========================
+   THEME OVERRIDES
+========================= */
+
+.btn-primary {
+  background: var(--accent);
+  color: var(--accent-fg);
+  border: 1px solid var(--accent);
+}
+
+.btn-primary:hover {
+  background: var(--accent2);
+  color: var(--accent-fg);
+  border-color: var(--accent2);
+  filter: none;
+}
+
+.stat-top > span:first-child {
+  background: var(--accent-soft);
+  color: var(--accent2);
+}
+
+body.dark .stat-top > span:first-child {
+  background: #422006;
+  color: #fbbf24;
+}

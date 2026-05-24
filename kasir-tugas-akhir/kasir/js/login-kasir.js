@@ -108,28 +108,12 @@ async function loginKasir() {
       }
     });
 
-    /* SIMPAN LOGIN */
     saveLoginUser(
       {
         ...kasirData,
         username
       },
       "kasir"
-    );
-
-    localStorage.setItem(
-      "kasirLogin",
-      "true"
-    );
-
-    localStorage.setItem(
-      "kasirUsername",
-      username
-    );
-
-    localStorage.setItem(
-      "kasirNama",
-      kasirData.nama || username
     );
 
     /* REDIRECT */

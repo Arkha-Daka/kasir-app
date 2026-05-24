@@ -1670,3 +1670,127 @@ body:not(.dark) .sidebar-btn.active:hover {
   color: var(--accent-fg);
   border-color: var(--accent);
 }
+
+/* =========================
+   THEME COLOR CONSISTENCY
+========================= */
+
+.modal-content,
+.laporan-modal,
+.setting-modal {
+  color: var(--text);
+  background: var(--surface-solid);
+}
+
+.modal-content p,
+.modal-content label,
+.setting-card p,
+.setting-check,
+.laporan-label,
+.top-product-item,
+.kasir-list,
+.form-group label {
+  color: var(--text2);
+  opacity: 1;
+}
+
+.modal-head h2,
+.setting-title,
+.laporan-section h3,
+.laporan-value,
+.top-product-item b,
+.kasir-list b {
+  color: var(--text);
+}
+
+.laporan-card,
+.setting-card,
+.top-product-item,
+.kasir-list .barang-item {
+  background: var(--surface2);
+  border: 1.5px solid var(--border);
+}
+
+.laporan-filter .btn-primary,
+.setting-modal .btn-primary,
+.modal-content .btn-primary {
+  background: var(--accent);
+  color: var(--accent-fg);
+  border: 1px solid var(--accent);
+}
+
+.laporan-filter .btn-primary:hover,
+.setting-modal .btn-primary:hover,
+.modal-content .btn-primary:hover {
+  background: var(--accent2);
+  color: var(--accent-fg);
+  border-color: var(--accent2);
+  filter: none;
+}
+
+.theme-btn,
+.logo-box,
+.sidebar-menu a.active,
+.sidebar-btn.active {
+  background: var(--accent);
+  color: var(--accent-fg);
+}
+
+.theme-btn:hover {
+  background: var(--accent2);
+  color: var(--accent-fg);
+}
+
+body:not(.dark) .modal-content p,
+body:not(.dark) .modal-content label,
+body:not(.dark) .setting-card p,
+body:not(.dark) .setting-check,
+body:not(.dark) .laporan-label,
+body:not(.dark) .top-product-item,
+body:not(.dark) .kasir-list {
+  color: #334155;
+}
+
+body:not(.dark) .modal-head h2,
+body:not(.dark) .setting-title,
+body:not(.dark) .laporan-section h3,
+body:not(.dark) .laporan-value,
+body:not(.dark) .top-product-item b,
+body:not(.dark) .kasir-list b {
+  color: #0d1117;
+}
+
+body.dark .modal-content,
+body.dark .laporan-modal,
+body.dark .setting-modal {
+  color: #eef2f8;
+  background: #0f1623;
+}
+
+body.dark .modal-content p,
+body.dark .modal-content label,
+body.dark .setting-card p,
+body.dark .setting-check,
+body.dark .laporan-label,
+body.dark .top-product-item,
+body.dark .kasir-list,
+body.dark .form-group label {
+  color: #d8e1ef;
+}
+
+body.dark .modal-head h2,
+body.dark .setting-title,
+body.dark .laporan-section h3,
+body.dark .laporan-value,
+body.dark .top-product-item b,
+body.dark .kasir-list b {
+  color: #f8fafc;
+}
+
+body.dark .laporan-card,
+body.dark .setting-card,
+body.dark .top-product-item,
+body.dark .kasir-list .barang-item {
+  background: #141f31;
+  border-color: #32435f;
+}

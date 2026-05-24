@@ -179,3 +179,72 @@ body.dark .btn-delete {
   }
 
 }
+
+/* =========================
+   THEME OVERRIDES
+========================= */
+
+.mini-label,
+.form-group label {
+  color: var(--text2);
+  opacity: 1;
+}
+
+.mini-value,
+.barang-header,
+.form-group {
+  color: var(--text);
+}
+
+.btn-edit {
+  background: var(--accent-soft);
+  color: var(--accent2);
+  border: 1px solid rgba(245,158,11,.35);
+}
+
+.btn-edit:hover {
+  background: var(--accent);
+  color: var(--accent-fg);
+}
+
+.btn-delete {
+  background: var(--red-soft);
+  color: var(--red);
+  border: 1px solid var(--red);
+}
+
+.btn-delete:hover {
+  background: var(--red);
+  color: #ffffff;
+}
+
+.stock-safe {
+  background: var(--green-soft);
+  color: var(--green);
+}
+
+.stock-low {
+  background: var(--accent-soft);
+  color: var(--accent2);
+}
+
+.stock-empty {
+  background: var(--red-soft);
+  color: var(--red);
+}
+
+body.dark .mini-label,
+body.dark .form-group label {
+  color: #d8e1ef;
+}
+
+body.dark .btn-edit {
+  background: #422006;
+  color: #fbbf24;
+  border-color: rgba(251,191,36,.35);
+}
+
+body.dark .btn-edit:hover {
+  background: var(--accent);
+  color: var(--accent-fg);
+}
