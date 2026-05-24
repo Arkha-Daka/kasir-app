@@ -51,6 +51,137 @@ function getJsonBody(req) {
   return req.body || {};
 }
 
+function isPaidStatus(paymentStatus) {
+  return paymentStatus === "Selesai";
+}
+
+async function updateTransactionFromMidtrans({
+  admin,
+  db,
+  transactionRef,
+  status,
+  paymentStatus
+}) {
+  const FieldValue = admin.firestore.FieldValue;
+  let stockUpdated = false;
+
+  await db.runTransaction(async (trx) => {
+    const transactionSnap = await trx.get(transactionRef);
+
+    if (!transactionSnap.exists) {
+      return;
+    }
+
+    const transactionData = transactionSnap.data();
+    const items = Array.isArray(transactionData.items)
+      ? transactionData.items
+      : [];
+
+    const validItems = items
+      .map((item) => ({
+        id: item.id,
+        kode: item.kode || "",
+        nama: item.nama || "-",
+        qty: Math.max(1, Number(item.qty || 1))
+      }))
+      .filter((item) => item.id);
+
+    const shouldUpdateStock =
+      isPaidStatus(paymentStatus)
+      && transactionData.midtrans?.stockUpdated !== true
+      && validItems.length > 0;
+
+    const barangRefs = shouldUpdateStock
+      ? validItems.map((item) => ({
+          item,
+          ref: db.collection("barang").doc(item.id)
+        }))
+      : [];
+
+    const barangSnaps = await Promise.all(
+      barangRefs.map(({ ref }) => trx.get(ref))
+    );
+
+    const updateData = {
+      statusPembayaran: paymentStatus,
+      "midtrans.orderId": status.order_id,
+      "midtrans.transactionId": status.transaction_id || null,
+      "midtrans.paymentType": status.payment_type || null,
+      "midtrans.transactionStatus": status.transaction_status || null,
+      "midtrans.fraudStatus": status.fraud_status || null,
+      "midtrans.grossAmount": Number(status.gross_amount || 0),
+      "midtrans.updatedAt": FieldValue.serverTimestamp()
+    };
+
+    if (shouldUpdateStock) {
+      updateData["midtrans.stockUpdated"] = true;
+      updateData["midtrans.stockUpdatedAt"] = FieldValue.serverTimestamp();
+      stockUpdated = true;
+    }
+
+    trx.update(transactionRef, updateData);
+
+    if (!shouldUpdateStock) {
+      return;
+    }
+
+    barangRefs.forEach(({ item, ref }, index) => {
+      const barangSnap = barangSnaps[index];
+
+      if (!barangSnap.exists) {
+        return;
+      }
+
+      const stokSebelum = Number(barangSnap.data().stok || 0);
+      const stokSesudah = Math.max(stokSebelum - item.qty, 0);
+
+      trx.update(ref, {
+        stok: stokSesudah,
+        updatedAt: FieldValue.serverTimestamp()
+      });
+
+      trx.set(
+        db.collection("stokLog").doc(),
+        {
+          barangId: item.id,
+          kode: item.kode,
+          nama: item.nama,
+          tipe: "keluar",
+          qty: item.qty,
+          stokSebelum,
+          stokSesudah,
+          sumber: "midtrans",
+          refId: transactionRef.id,
+          invoice: status.order_id,
+          createdAt: FieldValue.serverTimestamp()
+        }
+      );
+    });
+
+    trx.set(
+      db.collection("aktivitas").doc(),
+      {
+        tipe: "transaksi",
+        judul: `Transaksi ${status.order_id}`,
+        deskripsi: `Midtrans ${paymentStatus}`,
+        refId: transactionRef.id,
+        meta: {
+          invoice: status.order_id,
+          metode: "Midtrans",
+          statusPembayaran: paymentStatus,
+          total: Number(status.gross_amount || 0)
+        },
+        sortTime: Date.now(),
+        createdAt: FieldValue.serverTimestamp()
+      }
+    );
+  });
+
+  return {
+    stockUpdated
+  };
+}
+
 module.exports = async function handler(req, res) {
   if (setCors(req, res)) return;
 
@@ -76,24 +207,25 @@ module.exports = async function handler(req, res) {
     const admin = getFirebaseAdmin();
     const db = getDb();
     const transactionRef = await findTransactionRef(db, status.order_id);
+    let stockUpdated = false;
 
     if (transactionRef) {
-      await transactionRef.update({
-        statusPembayaran: paymentStatus,
-        "midtrans.orderId": status.order_id,
-        "midtrans.transactionId": status.transaction_id || null,
-        "midtrans.paymentType": status.payment_type || null,
-        "midtrans.transactionStatus": status.transaction_status || null,
-        "midtrans.fraudStatus": status.fraud_status || null,
-        "midtrans.grossAmount": Number(status.gross_amount || 0),
-        "midtrans.updatedAt": admin.firestore.FieldValue.serverTimestamp()
+      const result = await updateTransactionFromMidtrans({
+        admin,
+        db,
+        transactionRef,
+        status,
+        paymentStatus
       });
+
+      stockUpdated = result.stockUpdated;
     }
 
     res.status(200).json({
       ok: true,
       orderId: status.order_id,
       statusPembayaran: paymentStatus,
+      stockUpdated,
       firestoreUpdated: Boolean(transactionRef)
     });
   } catch (err) {

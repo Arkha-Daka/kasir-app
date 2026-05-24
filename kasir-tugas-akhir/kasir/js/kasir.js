@@ -59,6 +59,10 @@ if (kasirBadge) {
 const PPN_RATE    = 0.11;
 const DISKON_MIN  = 100000;
 const DISKON_RATE = 0.10;
+const MIDTRANS_API_URL =
+  "https://www.boedoet.store/api/create-midtrans-transaction";
+const MIDTRANS_SNAP_URL =
+  "https://app.sandbox.midtrans.com/snap/snap.js";
 
 function escapeHtml(value) {
 
@@ -104,6 +108,50 @@ function loadScriptOnce(src) {
     });
 
   return loadedScripts[src];
+
+}
+
+function loadMidtransSnap(clientKey) {
+
+  if (window.snap) {
+    return Promise.resolve();
+  }
+
+  if (loadedScripts[MIDTRANS_SNAP_URL]) {
+    return loadedScripts[MIDTRANS_SNAP_URL];
+  }
+
+  loadedScripts[MIDTRANS_SNAP_URL] =
+    new Promise((resolve, reject) => {
+
+      const existing =
+        document.querySelector(
+          `script[src="${MIDTRANS_SNAP_URL}"]`
+        );
+
+      if (existing) {
+        existing.addEventListener("load", resolve);
+        existing.addEventListener("error", reject);
+        return;
+      }
+
+      const script =
+        document.createElement("script");
+
+      script.src = MIDTRANS_SNAP_URL;
+      script.async = true;
+      script.setAttribute(
+        "data-client-key",
+        clientKey
+      );
+      script.onload = resolve;
+      script.onerror = reject;
+
+      document.head.appendChild(script);
+
+    });
+
+  return loadedScripts[MIDTRANS_SNAP_URL];
 
 }
 
@@ -936,9 +984,40 @@ window.renderPayment = async function () {
 
   if (!keranjang.length) return;
 
+  /* MIDTRANS */
+
+  if (metode === "midtrans") {
+
+    area.innerHTML = `
+      <div class="pay-box">
+
+        <div class="cash-box">
+
+          <div class="cash-amount">
+            ${rp(totalAkhir)}
+          </div>
+
+          <div class="cash-sub">
+            Pembayaran aman lewat Midtrans Sandbox
+          </div>
+
+          <button
+            class="btn btn-checkout"
+            onclick="bayarMidtrans()"
+          >
+            Bayar dengan Midtrans
+          </button>
+
+        </div>
+
+      </div>
+    `;
+
+  }
+
   /* QRIS */
 
-  if (metode === "qris") {
+  else if (metode === "qris") {
 
     area.innerHTML = `
       <div class="pay-box qris-box">
@@ -1076,6 +1155,319 @@ window.hitungKembalian = function () {
     "kembalianCash"
   ).textContent =
     rp(Math.max(kembalian, 0));
+
+};
+
+function buatRingkasanTransaksi(metode) {
+
+  const invoice =
+    "INV-" + Date.now();
+
+  const tanggal =
+    new Date().toLocaleString(
+      "id-ID"
+    );
+
+  const subtotal =
+    keranjang.reduce(
+      (s, i) => s + i.subtotal,
+      0
+    );
+
+  const diskon =
+    subtotal > DISKON_MIN
+      ? subtotal * DISKON_RATE
+      : 0;
+
+  const ppn =
+    (subtotal - diskon)
+    * PPN_RATE;
+
+  const items =
+    keranjang.map(
+      (item) => ({
+        id: item.id,
+        kode: item.kode,
+        nama: item.nama,
+        qty: item.jumlah,
+        harga: item.harga,
+        subtotal: item.subtotal,
+        stokSebelum: item.stok,
+        stokSesudah: item.stok - item.jumlah
+      })
+    );
+
+  const kasir =
+    loginUser.nama
+    ||
+    loginUser.username
+    || "Kasir";
+
+  return {
+    invoice,
+    tanggal,
+    metode,
+    kasir,
+    subtotal,
+    diskon,
+    ppn,
+    total: totalAkhir,
+    bayar: paymentInfo.bayar || 0,
+    kembalian: paymentInfo.kembalian || 0,
+    items
+  };
+
+}
+
+async function buatTransaksiMidtransPending() {
+
+  const data =
+    buatRingkasanTransaksi("Midtrans");
+
+  const transaksiRef =
+    await addDoc(
+      collection(db, "transaksi"),
+      {
+        invoice: data.invoice,
+        tanggal: data.tanggal,
+        metode: data.metode,
+        subtotal: data.subtotal,
+        diskon: data.diskon,
+        ppn: data.ppn,
+        total: data.total,
+        bayar: 0,
+        kembalian: 0,
+        kasir: data.kasir,
+        statusPembayaran: "Pending",
+        timestamp: serverTimestamp(),
+        midtrans: {
+          orderId: data.invoice,
+          stockUpdated: false
+        },
+        items: data.items.map((item) => ({
+          id: item.id,
+          kode: item.kode,
+          nama: item.nama,
+          qty: item.qty,
+          harga: item.harga,
+          subtotal: item.subtotal,
+          stokSebelum: item.stokSebelum,
+          stokSesudah: item.stokSesudah
+        }))
+      }
+    );
+
+  await catatAktivitas({
+    tipe: "transaksi",
+    judul: `Transaksi ${data.invoice}`,
+    deskripsi:
+      `Midtrans pending sebesar ${rp(data.total)}`,
+    refId: transaksiRef.id,
+    meta: {
+      invoice: data.invoice,
+      metode: "Midtrans",
+      statusPembayaran: "Pending",
+      total: data.total,
+      jumlahItem: data.items.length
+    }
+  });
+
+  return {
+    data,
+    transaksiRef
+  };
+
+}
+
+async function requestMidtransToken(data, transaksiId) {
+
+  const response =
+    await fetch(
+      MIDTRANS_API_URL,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          invoice: data.invoice,
+          orderId: data.invoice,
+          transaksiId,
+          total: data.total,
+          grossAmount: data.total,
+          kasir: data.kasir,
+          customerName: data.kasir,
+          items: data.items.map((item) => ({
+            id: item.kode || item.id,
+            name: item.nama,
+            price: item.harga,
+            quantity: item.qty
+          }))
+        })
+      }
+    );
+
+  const result =
+    await response.json();
+
+  if (!response.ok) {
+    throw new Error(
+      result.error
+      || "Gagal membuat pembayaran Midtrans"
+    );
+  }
+
+  if (!result.token || !result.clientKey) {
+    throw new Error(
+      "Token Midtrans tidak lengkap"
+    );
+  }
+
+  return result;
+
+}
+
+async function tandaiMidtransClientStatus(
+  transaksiRef,
+  status,
+  snapResult = null
+) {
+
+  try {
+    await updateDoc(
+      transaksiRef,
+      {
+        "midtrans.clientStatus": status,
+        "midtrans.snapResult": snapResult || null,
+        "midtrans.clientUpdatedAt": serverTimestamp()
+      }
+    );
+  } catch (err) {
+    console.warn(
+      "Gagal update status client Midtrans:",
+      err
+    );
+  }
+
+}
+
+async function bersihkanSetelahMidtrans(data) {
+
+  showToast(
+    "Pembayaran Midtrans diproses",
+    "ok"
+  );
+
+  keranjang = [];
+  barangDipilih = null;
+  editKeranjang = null;
+  totalAkhir = 0;
+
+  renderKasir();
+  resetForm();
+  showReceipt(data);
+  paymentInfo = {};
+  await loadBarangCache();
+
+}
+
+window.bayarMidtrans = async function () {
+
+  if (!keranjang.length) {
+    showToast(
+      "Keranjang masih kosong",
+      "err"
+    );
+    return;
+  }
+
+  const btn =
+    document.querySelector(
+      "button[onclick='bayarMidtrans()']"
+    );
+
+  try {
+    if (btn) {
+      btn.disabled = true;
+      btn.textContent = "Memproses...";
+    }
+
+    const {
+      data,
+      transaksiRef
+    } =
+      await buatTransaksiMidtransPending();
+
+    const midtrans =
+      await requestMidtransToken(
+        data,
+        transaksiRef.id
+      );
+
+    await loadMidtransSnap(
+      midtrans.clientKey
+    );
+
+    if (!window.snap) {
+      throw new Error(
+        "Snap Midtrans belum termuat"
+      );
+    }
+
+    window.snap.pay(
+      midtrans.token,
+      {
+        onSuccess: async (result) => {
+          await tandaiMidtransClientStatus(
+            transaksiRef,
+            "success",
+            result
+          );
+          await bersihkanSetelahMidtrans(data);
+        },
+        onPending: async (result) => {
+          await tandaiMidtransClientStatus(
+            transaksiRef,
+            "pending",
+            result
+          );
+          await bersihkanSetelahMidtrans(data);
+        },
+        onError: async (result) => {
+          await tandaiMidtransClientStatus(
+            transaksiRef,
+            "error",
+            result
+          );
+          showToast(
+            "Pembayaran Midtrans gagal",
+            "err"
+          );
+        },
+        onClose: async () => {
+          await tandaiMidtransClientStatus(
+            transaksiRef,
+            "closed"
+          );
+          showToast(
+            "Popup Midtrans ditutup",
+            "err"
+          );
+        }
+      }
+    );
+  } catch (err) {
+    console.error(err);
+    showToast(
+      err.message || "Gagal membuka Midtrans",
+      "err"
+    );
+  } finally {
+    if (btn) {
+      btn.disabled = false;
+      btn.textContent = "Bayar dengan Midtrans";
+    }
+  }
 
 };
 
