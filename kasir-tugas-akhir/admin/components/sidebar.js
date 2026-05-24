@@ -17,9 +17,19 @@ import {
 
 let laporanLoaded = false;
 let kasirLoaded = false;
+let sidebarModalsReady = false;
 let laporanTransaksi = [];
 let laporanBarang = [];
 const loadedScripts = {};
+let sidebarSetupAttempts = 0;
+const sidebarSetupTimer = setInterval(() => {
+  sidebarSetupAttempts++;
+  setupSidebarModals();
+
+  if (sidebarModalsReady || sidebarSetupAttempts >= 20) {
+    clearInterval(sidebarSetupTimer);
+  }
+}, 300);
 
 function loadScriptOnce(src) {
   if (loadedScripts[src]) return loadedScripts[src];
@@ -45,12 +55,33 @@ function loadScriptOnce(src) {
   return loadedScripts[src];
 }
 
+function loadScriptWithTimeout(src, timeout = 4000) {
+  return Promise.race([
+    loadScriptOnce(src),
+    new Promise((_, reject) => {
+      setTimeout(() => {
+        reject(new Error(`Timeout memuat ${src}`));
+      }, timeout);
+    })
+  ]);
+}
+
 window.addEventListener("componentsLoaded", async () => {
   await new Promise((resolve) => setTimeout(resolve, 100));
   setupSidebarModals();
 });
 
 function setupSidebarModals() {
+  if (sidebarModalsReady && document.getElementById("laporanModal")) {
+    return;
+  }
+
+  if (!document.getElementById("laporanModal")) {
+    return;
+  }
+
+  sidebarModalsReady = true;
+
   window.openLaporan = async function () {
     const modal = document.getElementById("laporanModal");
     if (!modal) return;
@@ -59,12 +90,15 @@ function setupSidebarModals() {
 
     if (!laporanLoaded) {
       laporanLoaded = true;
-      try {
-        await loadScriptOnce("https://cdn.jsdelivr.net/npm/chart.js");
-      } catch (err) {
-        console.warn("Chart.js belum bisa dimuat:", err);
-      }
       await loadLaporanSidebar();
+
+      loadScriptWithTimeout("https://cdn.jsdelivr.net/npm/chart.js")
+        .then(() => {
+          renderLaporan(getFilteredLaporan());
+        })
+        .catch((err) => {
+          console.warn("Chart.js belum bisa dimuat:", err);
+        });
     }
   };
 
@@ -82,28 +116,44 @@ function setupSidebarModals() {
 }
 
 async function loadLaporanSidebar() {
+  const topProductList = document.getElementById("topProductList");
+  const stokLogList = document.getElementById("stokLogList");
+
   try {
     if (!document.getElementById("laporanTransaksi")) return;
 
-    const transaksiSnap = await getDocs(collection(db, "transaksi"));
-    const barangSnap = await getDocs(collection(db, "barang"));
+    if (topProductList) topProductList.innerHTML = "Memuat data...";
+    if (stokLogList) stokLogList.innerHTML = "Memuat data...";
+
+    const [transaksiResult, barangResult] = await Promise.allSettled([
+      getDocs(collection(db, "transaksi")),
+      getDocs(collection(db, "barang"))
+    ]);
 
     laporanTransaksi = [];
     laporanBarang = [];
 
-    transaksiSnap.forEach((item) => {
-      laporanTransaksi.push({
-        id: item.id,
-        ...item.data()
+    if (transaksiResult.status === "fulfilled") {
+      transaksiResult.value.forEach((item) => {
+        laporanTransaksi.push({
+          id: item.id,
+          ...item.data()
+        });
       });
-    });
+    } else {
+      console.warn("Gagal memuat transaksi laporan:", transaksiResult.reason);
+    }
 
-    barangSnap.forEach((item) => {
-      laporanBarang.push({
-        id: item.id,
-        ...item.data()
+    if (barangResult.status === "fulfilled") {
+      barangResult.value.forEach((item) => {
+        laporanBarang.push({
+          id: item.id,
+          ...item.data()
+        });
       });
-    });
+    } else {
+      console.warn("Gagal memuat barang laporan:", barangResult.reason);
+    }
 
     renderLaporan(laporanTransaksi);
 
@@ -119,11 +169,17 @@ async function loadLaporanSidebar() {
       renderStokLog(stokLogSnap);
     } catch (err) {
       console.warn("Gagal memuat riwayat stok:", err);
-      const el = document.getElementById("stokLogList");
-      if (el) el.innerHTML = "Riwayat stok belum bisa dimuat";
+      if (stokLogList) stokLogList.innerHTML = "Riwayat stok belum bisa dimuat";
     }
   } catch (err) {
     console.error("loadLaporanSidebar error:", err);
+
+    document.getElementById("laporanTransaksi").textContent = "0";
+    document.getElementById("laporanOmzet").textContent = "Rp 0";
+    document.getElementById("laporanProduk").textContent = "0";
+    document.getElementById("laporanStok").textContent = "0";
+    if (topProductList) topProductList.innerHTML = "Laporan belum bisa dimuat";
+    if (stokLogList) stokLogList.innerHTML = "Riwayat stok belum bisa dimuat";
   }
 }
 

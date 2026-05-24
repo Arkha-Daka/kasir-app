@@ -1397,3 +1397,264 @@ body.dark .btn-add:hover {
   background: var(--accent2);
   color: var(--accent-fg);
 }
+
+/* =========================
+   MOBILE PHONE FIT FIX
+========================= */
+
+html,
+body {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+.wrapper,
+.left-col,
+.right-col,
+.card,
+.card-body,
+.field,
+.field-row,
+.table-wrap,
+#payMethodWrap,
+#paymentArea {
+  min-width: 0;
+}
+
+@media (max-width: 680px) {
+  .topbar {
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+    padding: 12px;
+  }
+
+  .brand {
+    min-width: 0;
+  }
+
+  .brand-text,
+  .brand-name,
+  .brand p {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .topbar-right {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 46px minmax(0, 1fr);
+    gap: 10px;
+  }
+
+  .topbar-right .btn,
+  .topbar-right .btn-logout {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .wrapper {
+    width: 100%;
+    max-width: none;
+    padding: 12px;
+    margin: 0;
+    gap: 12px;
+  }
+
+  .card {
+    width: 100%;
+    border-radius: 12px;
+  }
+
+  .card-head {
+    padding: 16px 14px 0;
+  }
+
+  .card-body {
+    padding: 14px;
+  }
+
+  .field > div[style*="display:flex"] {
+    min-width: 0;
+  }
+
+  .field > div[style*="display:flex"] input {
+    min-width: 0;
+  }
+
+  input[type="text"],
+  input[type="number"],
+  select,
+  .compact-select,
+  .pay-select {
+    max-width: 100%;
+    min-width: 0;
+    font-size: 14px;
+  }
+
+  .suggest-item {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .right-col .table-wrap {
+    width: 100%;
+    min-height: 0;
+    max-height: none;
+    overflow-x: hidden;
+    overflow-y: visible;
+    border: none;
+  }
+
+  #kasirTable {
+    width: 100%;
+    min-width: 0;
+    border-collapse: separate;
+    border-spacing: 0 10px;
+  }
+
+  #kasirTable thead {
+    display: none;
+  }
+
+  #kasirTable tbody,
+  #kasirTable tr,
+  #kasirTable td {
+    display: block;
+    width: 100%;
+  }
+
+  #kasirTable tbody tr {
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    background: var(--surface2);
+    overflow: hidden;
+  }
+
+  #kasirTable tbody tr:has(.empty) {
+    background: transparent;
+  }
+
+  #kasirTable td {
+    height: auto;
+    min-height: 0;
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    text-align: right;
+    overflow-wrap: anywhere;
+  }
+
+  #kasirTable td:last-child {
+    border-bottom: none;
+  }
+
+  #kasirTable td::before {
+    color: var(--text2);
+    content: "";
+    flex: 0 0 auto;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: .06em;
+    text-align: left;
+    text-transform: uppercase;
+  }
+
+  #kasirTable td:nth-child(1)::before { content: "#"; }
+  #kasirTable td:nth-child(2)::before { content: "Nama"; }
+  #kasirTable td:nth-child(3)::before { content: "Harga"; }
+  #kasirTable td:nth-child(4)::before { content: "Qty"; }
+  #kasirTable td:nth-child(5)::before { content: "Subtotal"; }
+  #kasirTable td:nth-child(6)::before { content: "Aksi"; }
+
+  #kasirTable td[colspan] {
+    display: block;
+    padding: 0;
+    text-align: center;
+  }
+
+  #kasirTable td[colspan]::before {
+    content: none;
+  }
+
+  .qty-control {
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+
+  .qty-input {
+    width: 64px;
+    min-width: 64px;
+  }
+
+  .td-actions {
+    justify-content: flex-end;
+  }
+
+  .empty {
+    min-height: 180px;
+    padding: 28px 12px;
+  }
+
+  .summary,
+  .pay-box {
+    width: 100%;
+    padding: 14px;
+  }
+
+  .sum-row,
+  .transfer-row,
+  .receipt-row {
+    gap: 10px;
+  }
+
+  .sum-row .val,
+  .sum-total .val,
+  .transfer-row .v {
+    overflow-wrap: anywhere;
+  }
+
+  .cash-amount,
+  .qris-amount {
+    font-size: 24px;
+    overflow-wrap: anywhere;
+  }
+
+  .modal,
+  .receipt-modal {
+    width: 100%;
+    max-width: calc(100vw - 24px);
+  }
+}
+
+@media (max-width: 380px) {
+  .wrapper {
+    padding: 8px;
+  }
+
+  .card-head {
+    padding: 14px 12px 0;
+  }
+
+  .card-body {
+    padding: 12px;
+  }
+
+  .brand-logo {
+    width: 40px;
+    height: 40px;
+  }
+
+  .brand-name {
+    font-size: 15px;
+  }
+
+  .btn {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+}
