@@ -207,13 +207,18 @@ body {
 
   border-radius: 16px;
 
-  background: var(--gradient);
+  background: #0d1117;
 
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: block;
 
-  font-size: 24px;
+  overflow: hidden;
+}
+
+.logo-box img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
 }
 
 .sidebar-logo h2 {
@@ -978,10 +983,9 @@ body.dark {
   width: 44px;
   height: 44px;
   border-radius: 12px;
-  background: var(--accent);
+  background: #0d1117;
   color: #0d1117;
-  font-size: 18px;
-  font-weight: 900;
+  overflow: hidden;
   box-shadow: 0 12px 24px rgba(245,158,11,.24);
 }
 
@@ -1729,7 +1733,6 @@ body:not(.dark) .sidebar-btn.active:hover {
 }
 
 .theme-btn,
-.logo-box,
 .sidebar-menu a.active,
 .sidebar-btn.active {
   background: var(--accent);

@@ -8,6 +8,9 @@
 
   <title>Login SmartKasir</title>
 
+  <link rel="icon" type="image/png"
+        href="../../assets/favicon.png">
+
   <link rel="stylesheet"
         href="../css/global.css">
 
@@ -75,12 +78,17 @@
       width: 46px;
       height: 46px;
       border-radius: 12px;
-      display: grid;
-      place-items: center;
-      background: #f59e0b;
-      color: #0d1117;
-      font-weight: 900;
+      display: block;
+      overflow: hidden;
+      background: #0d1117;
       box-shadow: 0 12px 24px rgba(245,158,11,.28);
+    }
+
+    .login-logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
     }
 
     .login-brand h1 {
@@ -162,7 +170,9 @@
 <div class="login-box">
 
   <div class="login-brand">
-    <div class="login-logo">KS</div>
+    <div class="login-logo">
+      <img src="../../assets/logo.png" alt="Logo Kantin Sekolah">
+    </div>
     <div>
       <h1>Admin Kantin</h1>
       <p>Masuk ke dashboard pengelola</p>

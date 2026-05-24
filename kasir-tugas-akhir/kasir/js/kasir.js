@@ -1329,7 +1329,7 @@ function showReceipt(data) {
     "receiptContent"
   ).innerHTML = `
     <div class="receipt-head">
-      <strong>Rumah Makan</strong><br>
+      <strong>Boedoet Store</strong><br>
       Struk Pembayaran
     </div>
 
