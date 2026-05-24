@@ -1662,3 +1662,155 @@ body {
     padding-right: 10px;
   }
 }
+
+/* =========================
+   MOBILE BOTTOM NAV
+========================= */
+
+.mobile-bottom-nav {
+  display: none;
+}
+
+@media (max-width: 680px) {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    padding-bottom: 82px;
+  }
+
+  .topbar {
+    position: sticky;
+    top: 0;
+    z-index: 170;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    min-height: 68px;
+    padding: 12px 14px;
+  }
+
+  .wrapper {
+    padding-top: 12px;
+    padding-bottom: 96px;
+  }
+
+  .topbar-right {
+    display: none;
+  }
+
+  .brand {
+    width: 100%;
+  }
+
+  #inputSection,
+  #keranjangSection {
+    scroll-margin-top: 12px;
+  }
+
+  .mobile-bottom-nav {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 180;
+    height: 74px;
+    padding: 0;
+    background: var(--ink);
+    border-top: 1px solid rgba(255,255,255,.08);
+    box-shadow: 0 -12px 34px rgba(8,12,20,.32);
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .mobile-nav-item {
+    border: none;
+    border-radius: 0;
+    background: transparent;
+    color: #cbd5e1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 0;
+    padding: 8px 4px;
+    text-decoration: none;
+    font: inherit;
+    font-size: 11px;
+    font-weight: 800;
+    cursor: pointer;
+    text-align: center;
+  }
+
+  .mobile-nav-item::before {
+    content: none;
+  }
+
+  .mobile-nav-icon {
+    width: 21px;
+    height: 21px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .mobile-nav-icon svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .mobile-nav-item {
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .mobile-nav-item:hover,
+  .mobile-nav-item:focus {
+    color: #ffffff;
+    background: rgba(255,255,255,.06);
+    outline: none;
+  }
+
+  .mobile-nav-item:nth-child(3) {
+    color: var(--accent);
+  }
+}
+
+.kasir-setting-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 220;
+  display: none;
+  align-items: flex-end;
+  background: rgba(8,12,20,.58);
+  backdrop-filter: blur(6px);
+}
+
+.kasir-setting-overlay.show {
+  display: flex;
+}
+
+.kasir-setting-modal {
+  width: 100%;
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: 18px 18px 0 0;
+  padding: 18px;
+  box-shadow: var(--shadow-lg);
+}
+
+.kasir-setting-actions {
+  display: grid;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.kasir-setting-actions .btn {
+  width: 100%;
+}

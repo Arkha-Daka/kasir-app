@@ -270,6 +270,16 @@ window.logoutKasir = function () {
 
 };
 
+window.openKasirSetting = function () {
+  document.getElementById("kasirSettingOverlay")
+    ?.classList.add("show");
+};
+
+window.closeKasirSetting = function () {
+  document.getElementById("kasirSettingOverlay")
+    ?.classList.remove("show");
+};
+
 /* ───────────────────────────────────────
    THEME
 ─────────────────────────────────────── */
