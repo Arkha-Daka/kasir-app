@@ -75,6 +75,19 @@ function escapeHtml(value) {
 
 }
 
+function getStokItem(item) {
+
+  return Math.max(
+    0,
+    Number(
+      item?.stok
+      ?? item?.stokSebelum
+      ?? 0
+    )
+  );
+
+}
+
 function loadScriptOnce(src) {
 
   if (loadedScripts[src]) {
@@ -283,11 +296,17 @@ function pilihBarang(barang) {
     "produkSuggestions"
   ).classList.remove("show");
 
-  document.getElementById(
-    "jumlahBarang"
-  ).focus();
+  const jumlahInput =
+    document.getElementById(
+      "jumlahBarang"
+    );
 
-  if (Number(barang.stok || 0) <= 5) {
+  jumlahInput.max =
+    getStokItem(barang);
+
+  jumlahInput.focus();
+
+  if (getStokItem(barang) <= 5) {
     showToast(
       `Stok ${barang.nama} tinggal ${barang.stok}`,
       "err"
@@ -577,12 +596,15 @@ window.tambahKeKasir = function () {
 
   /* VALIDASI STOK */
 
+  const stokDipilih =
+    getStokItem(barangDipilih);
+
   if (
-    jumlah > barangDipilih.stok
+    jumlah > stokDipilih
   ) {
 
     showToast(
-      "Stok tidak cukup!",
+      `Jumlah melebihi stok! Stok tersedia ${stokDipilih}`,
       "err"
     );
 
@@ -603,11 +625,11 @@ window.tambahKeKasir = function () {
   if (
     editKeranjang === null
     &&
-    qtyDiKeranjang + jumlah > barangDipilih.stok
+    qtyDiKeranjang + jumlah > stokDipilih
   ) {
 
     showToast(
-      "Total qty melebihi stok!",
+      `Total qty melebihi stok! Stok tersedia ${stokDipilih}`,
       "err"
     );
 
@@ -709,6 +731,10 @@ window.editItem = function (idx) {
   ).value = item.jumlah;
 
   document.getElementById(
+    "jumlahBarang"
+  ).max = getStokItem(item);
+
+  document.getElementById(
     "btnKeranjang"
   ).textContent =
     "✔ Simpan Perubahan";
@@ -738,6 +764,11 @@ window.hapusItem = function (idx) {
 
 window.simpanQty = function (idx) {
 
+  const item =
+    keranjang[idx];
+
+  if (!item) return;
+
   const val = Number(
     document.getElementById(
       `qtyEdit-${idx}`
@@ -758,11 +789,29 @@ window.simpanQty = function (idx) {
 
   }
 
-  keranjang[idx].jumlah =
+  const stok =
+    getStokItem(item);
+
+  if (val > stok) {
+
+    document.getElementById(
+      `qtyEdit-${idx}`
+    ).value = stok;
+
+    showToast(
+      `Jumlah melebihi stok! Stok tersedia ${stok}`,
+      "err"
+    );
+
+    return;
+
+  }
+
+  item.jumlah =
     val;
 
-  keranjang[idx].subtotal =
-    keranjang[idx].harga * val;
+  item.subtotal =
+    item.harga * val;
 
   renderKasir();
 
@@ -815,6 +864,14 @@ function renderKasir() {
 
   keranjang.forEach((item, i) => {
 
+    const stok =
+      getStokItem(item);
+
+    const plusDisabled =
+      Number(item.jumlah || 0) >= stok
+        ? "disabled"
+        : "";
+
     tbody.innerHTML += `
       <tr>
 
@@ -843,6 +900,7 @@ function renderKasir() {
               type="number"
               value="${escapeHtml(item.jumlah)}"
               min="1"
+              max="${escapeHtml(stok)}"
             >
 
             <button
@@ -855,6 +913,7 @@ function renderKasir() {
             <button
               class="btn btn-ghost btn-sm"
               onclick="ubahQty(${i}, 1)"
+              ${plusDisabled}
             >
               +
             </button>
@@ -929,6 +988,9 @@ function hitungSummary() {
       ? subtotal * DISKON_RATE
       : 0;
 
+  const diskonAktif =
+    diskon > 0;
+
   const setelahDiskon =
     subtotal - diskon;
 
@@ -947,6 +1009,20 @@ function hitungSummary() {
     "sumDiskon"
   ).textContent =
     "- " + rp(diskon);
+
+  document.getElementById(
+    "discRow"
+  ).style.display =
+    diskonAktif
+      ? "flex"
+      : "none";
+
+  document.getElementById(
+    "ppnNote"
+  ).textContent =
+    diskonAktif
+      ? "Setelah diskon"
+      : "Pajak";
 
   document.getElementById(
     "sumPPN"
@@ -1806,8 +1882,14 @@ window.ubahQty = function (idx, delta) {
     return;
   }
 
-  if (nextQty > item.stok) {
-    showToast("Stok tidak cukup!", "err");
+  const stok =
+    getStokItem(item);
+
+  if (nextQty > stok) {
+    showToast(
+      `Jumlah melebihi stok! Stok tersedia ${stok}`,
+      "err"
+    );
     return;
   }
 
@@ -1860,9 +1942,13 @@ function resetForm() {
     "hargaBarang"
   ).value = "";
 
-  document.getElementById(
-    "jumlahBarang"
-  ).value = "";
+  const jumlahInput =
+    document.getElementById(
+      "jumlahBarang"
+    );
+
+  jumlahInput.value = "";
+  jumlahInput.removeAttribute("max");
 
 }
 
